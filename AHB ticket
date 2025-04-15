@@ -1,0 +1,69 @@
+We are trying to hit the demographic endpoints provided by AHB but we getting SSL Connectivity Issue and HTTP 403 (Forbidden) from the proxy.
+
+Hi Scott,
+
+I hope you are doing well.
+
+We are currently facing the same SSL issue in AHB that we previously encountered in ADCB. 
+The IPs that are whitelisted are 
+
+proxy - 20.203.80.50
+
+Range - 20.203.76.224 to 20.203.76.229
+
+The issue in UAT (ahb16au):
+When we run the curl command, we are encountering an HTTP 403 error from the proxy, even though all listed IPs have been whitelisted by the client. 
+
+When we execute the request using the no proxy command, the traffic successfully reaches the server.
+
+I have attached the relevant screenshots and curls images for your reference.
+
+Request:
+
+curl -X GET https://api.cit.dtp.alhilalbankuaedev.ae/sas/v1/customers/330a48eb-9a17-33a4-a563-92f19a53d3d3 --cacert alhilalcert.pem
+
+Error Output
+
+curl: (56) Received HTTP code 403 from proxy after CONNECT
+
+(Refer to Image 1)
+
+ 
+
+when we use the no proxy command, the request works fine and traffic successfully reaches to the server.
+(Refer to Image 2 for successful UAT response with proxy.)
+
+ 
+
+The Issue in dev (ahb02au):
+In this also we are encountering the same HTTP 403 error from the proxy. However, there is an additional issue—when using the no proxy command, we are encountering an SSL connectivity error, whereas UAT is working fine without any SSL issues using no proxy command.
+
+Failing SSL Request
+
+curl -X GET https://api.cit.dtp.alhilalbankuaedev.ae/sas/v1/customers/330a48eb-9a17-33a4-a563-92f19a53d3d3 --cacert alhilalcert.pem --noproxy "*"
+
+Error Output in DEV (ahb02au)
+
+curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to api.cit.dtp.alhilalbankuaedev.ae:443
+
+(Refer to Image 3)
+
+ 
+
+Certificate Validation with OpenSSL Between UAT & DEV
+
+In UAT (ahb16au), when we check the SSL certificate from the client using OpenSSL, the certificate is correctly presented.
+
+(Refer to Image 4)
+
+ 
+
+In DEV (ahb02au), when running the same command, no certificate is received from the server.
+
+(Refer to Image 5)
+
+ 
+
+Please take a look at the issue we are facing and guide us on how it can be resolved? If you need any additional details regarding the issue, please let us know.
+
+Thank you for your time and support.
